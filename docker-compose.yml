@@ -1,0 +1,26 @@
+services:
+  manifest:
+    build: .
+    container_name: manifest
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      PORTAINER_URL: ${PORTAINER_URL}
+      PORTAINER_API_TOKEN: ${PORTAINER_API_TOKEN}
+      PORTAINER_SKIP_TLS_VERIFY: ${PORTAINER_SKIP_TLS_VERIFY:-false}
+      REFRESH_INTERVAL_HOURS: ${REFRESH_INTERVAL_HOURS:-6}
+      MANIFEST_SECRET_KEY: ${MANIFEST_SECRET_KEY:-}
+      SESSION_HOURS: ${SESSION_HOURS:-168}
+      TRUST_PROXY: ${TRUST_PROXY:-false}
+      BOOTSTRAP_ANYWHERE: ${BOOTSTRAP_ANYWHERE:-false}
+      AUTH_DISABLED: ${AUTH_DISABLED:-false}
+      ENABLE_UPDATES: ${ENABLE_UPDATES:-true}
+      STATS_API_KEY: ${STATS_API_KEY:-}
+      DISCORD_WEBHOOK_URL: ${DISCORD_WEBHOOK_URL:-}
+      PUBLIC_URL: ${PUBLIC_URL:-}
+    volumes:
+      - manifest-data:/data
+
+volumes:
+  manifest-data:
