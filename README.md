@@ -1,4 +1,4 @@
-﻿# Manifest
+# Manifest
 
 <p align="center">
   <img src="assets/manifest-icon.png" alt="Manifest logo" width="200">
@@ -82,7 +82,7 @@ Details: sessions are a signed, HttpOnly, SameSite=Strict cookie (Secure over HT
 - **Change the default password first**, from your LAN, before exposing anything.
 - **Use HTTPS.** Never publish plain `http://host:8080`: passwords would travel in clear text. Put Manifest behind a reverse proxy with a certificate (e.g. Nginx Proxy Manager + Let's Encrypt, or a Cloudflare Tunnel), publish only the proxy, set `TRUST_PROXY=true`, and don't port-forward 8080 directly. Make the proxy pass the `Host` header unchanged.
 - **Consider whether it needs to be public at all.** A VPN (WireGuard/Tailscale) or Cloudflare Access in front of it is much safer than a password alone. This app holds a Portainer API token and can recreate containers.
-- **Limit the damage:** use long unique passwords, create the Portainer token from a dedicated user with only the access it needs, give most people the Viewer role, and set `ENABLE_UPDATES=false` if you don't need the Update button remotely.
+- **Limit the damage:** use long unique passwords, create the Portainer token from a dedicated user with only the access it needs, give most people the Standard role, and set `ENABLE_UPDATES=false` if you don't need the Update button remotely.
 - The page shows your container and image names to anyone who signs in.
 
 ## Dashboard widget (Homepage)
