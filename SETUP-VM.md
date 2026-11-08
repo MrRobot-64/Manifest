@@ -103,7 +103,7 @@ Docker-published ports can bypass ufw rules. For strict control, change the comp
 3. Change the default `admin` password first, from your LAN, and consider turning on 2FA.
 4. Restrict port 8080 to the proxy's address only, so nobody can bypass HTTPS.
 
-See "Before you put this on the internet" in the README for the full checklist.
+See [Login and Security](https://github.com/MrRobot-64/Manifest/wiki/Login-and-Security) in the wiki for the full checklist.
 
 ## 8. Day-to-day
 
