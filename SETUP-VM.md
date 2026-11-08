@@ -25,22 +25,19 @@ docker run --rm hello-world
 docker compose version
 ```
 
-## 3. Get the code onto the VM
+## 3. Get the files onto the VM
 
-Clone the repository into a folder called `manifest` (keeping that name matters: Docker Compose names the data volume after the folder, so a different name would start with an empty data volume):
+Make a folder called `manifest` and download the compose file and settings template into it. Keep that folder name: Docker Compose names the data volume after the folder, so a different name would start with an empty data volume.
 
 ```bash
-git clone https://github.com/MrRobot-64/Manifest.git ~/manifest
-cd ~/manifest
+mkdir ~/manifest && cd ~/manifest
+curl -O https://raw.githubusercontent.com/MrRobot-64/Manifest/main/docker-compose.yml
+curl -O https://raw.githubusercontent.com/MrRobot-64/Manifest/main/.env.example
 ```
 
-Or copy the project folder from your PC instead (run on your PC):
+Docker pulls the ready-made image (`ghcr.io/mrrobot-64/manifest`) in step 6, so nothing is built on the VM.
 
-```powershell
-scp -r .\manifest user@<vm-ip>:~/manifest
-```
-
-then `cd ~/manifest` on the VM.
+*Prefer to build from source?* Clone the repo instead (`git clone https://github.com/MrRobot-64/Manifest.git ~/manifest && cd ~/manifest`) and use `docker compose up -d --build` in step 6 and `git pull && docker compose up -d --build` for updates.
 
 ## 4. Create a Portainer API token
 
@@ -76,7 +73,8 @@ You should see JSON listing your environments. A `401` means a bad token; a time
 ## 6. Start it
 
 ```bash
-docker compose up -d --build
+docker compose pull
+docker compose up -d
 docker compose logs -f
 ```
 
@@ -114,7 +112,7 @@ See "Before you put this on the internet" in the README for the full checklist.
 | View logs | `docker compose logs -f` |
 | Restart | `docker compose restart` |
 | Change config | edit `.env`, then `docker compose up -d` |
-| Update the app | `git pull && docker compose up -d --build` |
+| Update the app | `docker compose pull && docker compose up -d` |
 | Stop and remove | `docker compose down` |
 
 ## Troubleshooting
