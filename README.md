@@ -6,6 +6,10 @@ One page showing every Docker container across all your Portainer environments a
 
 Setting it up on a fresh VM? See [SETUP-VM.md](SETUP-VM.md).
 
+## License
+
+Manifest is released under the [MIT License](LICENSE). Its dependencies (FastAPI, Uvicorn, HTTPX, Segno) use MIT or BSD licenses.
+
 ## Versions and releases
 
 Current version: **1.0.0** (shown at the bottom of the page and in the startup log). See [CHANGELOG.md](CHANGELOG.md).
