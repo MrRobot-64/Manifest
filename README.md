@@ -1,6 +1,8 @@
 ﻿# Manifest
 
-<img src="assets/manifest-icon.png" alt="Manifest logo" width="200">
+<p align="center">
+  <img src="assets/manifest-icon.png" alt="Manifest logo" width="200">
+</p>
 
 One page showing every Docker container across all your Portainer environments and whether a newer image exists. It talks only to the Portainer API; nothing is installed on your machines beyond the Portainer Agent. The API token stays server-side.
 
