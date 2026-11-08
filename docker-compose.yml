@@ -1,5 +1,6 @@
 services:
   manifest:
+    image: ghcr.io/mrrobot-64/manifest:latest
     build: .
     container_name: manifest
     restart: unless-stopped
