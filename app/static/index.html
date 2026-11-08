@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Manifest</title>
+<link rel="icon" type="image/svg+xml" href="/static/logo.svg">
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--text:#1c2330;--muted:#667085;--line:#e4e7ec;--accent:#2563eb;
+ --ok:#157f3b;--okbg:#e3f6ea;--warn:#a15c00;--warnbg:#fff1d6;--unk:#555d6b;--unkbg:#eceef2}
+:root[data-theme=dark]{--bg:#0f131a;--card:#171c26;--text:#e6e9ef;--muted:#8b94a5;--line:#2a3140;--accent:#5b8def;
+ --ok:#5fd68a;--okbg:#14301f;--warn:#f5b84d;--warnbg:#3a2a0c;--unk:#a3acbb;--unkbg:#252b38}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0f131a;--card:#171c26;--text:#e6e9ef;--muted:#8b94a5;--line:#2a3140;--accent:#5b8def;
+ --ok:#5fd68a;--okbg:#14301f;--warn:#f5b84d;--warnbg:#3a2a0c;--unk:#a3acbb;--unkbg:#252b38}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:1200px;margin:0 auto;padding:20px 16px}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:16px}
+h1{font-size:20px;margin:0}
+.brand{display:flex;align-items:center;gap:12px}
+.sub{color:var(--muted);font-size:13px}
+.summary{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 16px;min-width:120px}
+.stat b{display:block;font-size:24px}
+.stat.warn b{color:var(--warn)}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+select,button,input{background:var(--card);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:7px 10px;font:inherit}
+button{cursor:pointer}button:hover{border-color:var(--accent)}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+button:disabled{opacity:.6;cursor:default}
+.banner{background:var(--warnbg);color:var(--warn);border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:14px}
+.wrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:10px}
+table{width:100%;border-collapse:collapse;min-width:760px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+td.img{white-space:normal;word-break:break-all}
+th{cursor:pointer;user-select:none;font-size:13px;color:var(--muted)}
+th.sorted::after{content:" \25B2"}th.sorted.desc::after{content:" \25BC"}
+tr:last-child td{border-bottom:0}
+.badge{padding:2px 9px;border-radius:99px;font-size:12.5px;font-weight:600}
+.up_to_date{background:var(--okbg);color:var(--ok)}
+.update_available{background:var(--warnbg);color:var(--warn)}
+.unknown{background:var(--unkbg);color:var(--unk)}
+.empty{padding:24px;text-align:center;color:var(--muted)}
+.check{display:flex;align-items:center;gap:6px;padding:0 6px;color:var(--muted)}
+.check input{padding:0}
+tr.group td{background:var(--bg);font-weight:600;cursor:pointer;border-top:1px solid var(--line)}
+tr.group .gcount{font-weight:400;color:var(--muted);margin-left:8px}
+tr.group .gout{color:var(--warn);font-weight:600;margin-left:8px}
+td.dim{color:var(--muted)}
+button.icon{padding:7px 9px;vertical-align:middle;line-height:0}
+dialog{background:var(--card);color:var(--text);border:1px solid var(--line);border-radius:12px;padding:20px;width:min(480px,calc(100vw - 32px))}
+dialog::backdrop{background:rgba(0,0,0,.5)}
+dialog h2{margin:0 0 4px;font-size:18px}dialog h3{margin:12px 0 4px;font-size:15px}
+dialog label{display:block;margin:12px 0 4px;font-size:13px;color:var(--muted)}
+dialog input{width:100%}
+dialog details{margin-top:8px;font-size:13px}dialog summary{cursor:pointer;color:var(--accent)}
+dialog ol{margin:6px 0 0;padding-left:20px}
+.msg{min-height:1.4em;margin:12px 0 0;font-size:14px}.msg.ok{color:var(--ok)}.msg.err{color:var(--warn)}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.who{margin-right:6px}
+.ver{text-align:center;margin:16px 0 0}
+.qr{display:flex;justify-content:center;margin:8px 0}
+.qr img{background:#fff;padding:8px;border-radius:8px}
+dialog code{word-break:break-all;user-select:all}
+dialog pre{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;margin:8px 0;font-size:14px;user-select:all}
+#tf-off[hidden],#tf-setup[hidden],#tf-codes[hidden],#tf-on[hidden],#k-new[hidden]{display:none}
+dialog hr{border:0;border-top:1px solid var(--line);margin:16px 0 4px}
+dialog{max-height:calc(100vh - 32px);overflow-y:auto}
+.urow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--line)}
+.urow .sub{flex:1;min-width:120px}
+.urow button{padding:2px 10px;font-size:12.5px}
+#u-add{margin-top:8px}
+button.upd{margin-left:8px;padding:2px 10px;font-size:12.5px;background:var(--accent);border-color:var(--accent);color:#fff}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="brand"><img src="/static/logo.svg" alt="" width="40" height="40"><div><h1>Manifest</h1><div class="sub" id="last">Loading…</div></div></div>
+    <div>
+      <span class="sub who" id="who"></span>
+      <button id="gear" class="icon" title="Settings" aria-label="Settings">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+      <button id="theme" title="Toggle dark mode">Theme</button>
+      <button id="logout" hidden>Log out</button>
+      <button id="refresh" class="primary">Refresh</button>
+    </div>
+  </header>
+  <div class="summary">
+    <div class="stat warn"><b id="s-out">–</b>outdated</div>
+    <div class="stat"><b id="s-ok">–</b>up to date</div>
+    <div class="stat"><b id="s-unk">–</b>unknown</div>
+    <div class="stat"><b id="s-tot">–</b>containers</div>
+  </div>
+  <div id="banners"></div>
+  <div class="controls">
+    <select id="f-machine"><option value="">All machines</option></select>
+    <select id="f-status">
+      <option value="">All statuses</option>
+      <option value="update_available">Update available</option>
+      <option value="up_to_date">Up to date</option>
+      <option value="unknown">Unknown</option>
+    </select>
+    <input id="f-text" type="search" placeholder="Search name or image">
+    <label class="check"><input id="group" type="checkbox" checked> Group by machine</label>
+  </div>
+  <dialog id="settings">
+    <form method="dialog" onsubmit="return false">
+      <h2>Settings</h2>
+      <div id="sec-account">
+        <h3>Change my password</h3>
+        <label for="cp-cur">Current password</label>
+        <input id="cp-cur" type="password" autocomplete="current-password">
+        <label for="cp-new">New password (at least 10 characters)</label>
+        <input id="cp-new" type="password" autocomplete="new-password">
+        <label for="cp-new2">Repeat new password</label>
+        <input id="cp-new2" type="password" autocomplete="new-password">
+        <p id="cp-msg" class="msg" role="status"></p>
+        <div class="actions"><button id="cp-save" type="button">Change password</button></div>
+        <hr>
+        <h3>Two-factor authentication</h3>
+        <p class="sub" id="tf-status">Adds a 6-digit code from an authenticator app to your sign-in.</p>
+        <div id="tf-off">
+          <label for="tf-pass">Your password</label>
+          <input id="tf-pass" type="password" autocomplete="current-password">
+          <div class="actions"><button id="tf-start" type="button">Set up 2FA</button></div>
+        </div>
+        <div id="tf-setup" hidden>
+          <p class="sub">1. Scan this QR code with an authenticator app (Google Authenticator, Authy, 1Password, Bitwarden...).</p>
+          <div class="qr"><img id="tf-qr" alt="QR code for the authenticator app" width="180" height="180"></div>
+          <p class="sub">Can't scan? Enter this key manually: <code id="tf-secret"></code></p>
+          <label for="tf-code">2. Enter the 6-digit code the app shows</label>
+          <input id="tf-code" inputmode="numeric" autocomplete="one-time-code" maxlength="7" spellcheck="false">
+          <div class="actions"><button id="tf-enable" type="button" class="primary">Turn on 2FA</button></div>
+        </div>
+        <div id="tf-codes" hidden>
+          <p class="msg ok">2FA is on. Save these recovery codes now. Each works once if you lose your phone, and they will not be shown again.</p>
+          <pre id="tf-codelist"></pre>
+          <div class="actions"><button id="tf-copy" type="button">Copy codes</button><button id="tf-done" type="button">I've saved them</button></div>
+        </div>
+        <div id="tf-on" hidden>
+          <label for="tf-dpass">Password</label>
+          <input id="tf-dpass" type="password" autocomplete="current-password">
+          <label for="tf-dcode">Current code or a recovery code</label>
+          <input id="tf-dcode" autocomplete="one-time-code" spellcheck="false">
+          <div class="actions"><button id="tf-disable" type="button">Turn off 2FA</button></div>
+        </div>
+        <p id="tf-msg" class="msg" role="status"></p>
+        <hr>
+        <h3>API keys</h3>
+        <p class="sub">For dashboard widgets such as Homepage. A key can only read the summary counts (<code>/api/stats</code>), nothing else. It belongs to your account and stops working if your account is deleted or an admin revokes it.</p>
+        <div id="k-list"></div>
+        <label for="k-name">New key name</label>
+        <input id="k-name" maxlength="40" placeholder="e.g. Homepage" autocomplete="off">
+        <div class="actions"><button id="k-add" type="button">Create API key</button></div>
+        <div id="k-new" hidden>
+          <p class="msg ok">Copy this key now. It won't be shown again.</p>
+          <pre id="k-value"></pre>
+          <p class="sub">Send it as the <code>X-API-Key</code> header. For Homepage, set it as <code>HOMEPAGE_VAR_MANIFEST_KEY</code>.</p>
+          <div class="actions"><button id="k-copy" type="button">Copy key</button><button id="k-done" type="button">I've saved it</button></div>
+        </div>
+        <p id="k-msg" class="msg" role="status"></p>
+      </div>
+      <div id="admin-sections" hidden>
+      <hr>
+      <h3>Discord alerts</h3>
+      <p class="sub" id="d-status">Loading…</p>
+      <label for="d-url">Webhook URL</label>
+      <input id="d-url" type="password" autocomplete="off" spellcheck="false" placeholder="https://discord.com/api/webhooks/…">
+      <details>
+        <summary>How do I create a webhook?</summary>
+        <ol class="sub">
+          <li>In Discord, open the channel's settings (gear icon).</li>
+          <li>Go to <b>Integrations</b> → <b>Webhooks</b> → <b>New Webhook</b>.</li>
+          <li>Click <b>Copy Webhook URL</b> and paste it above.</li>
+        </ol>
+      </details>
+      <label for="d-pub">Manifest address (optional, used for the link in alerts)</label>
+      <input id="d-pub" type="url" placeholder="http://10.0.0.49:8080">
+      <p id="d-msg" class="msg" role="status"></p>
+      <div class="actions">
+        <button id="d-save" class="primary" type="button">Save</button>
+        <button id="d-test" type="button">Send test</button>
+        <button id="d-remove" type="button">Remove webhook</button>
+      </div>
+      <div id="sec-users">
+        <hr>
+        <h3>Users</h3>
+        <p class="sub">Standard users are read-only: they can see the table and refresh it, but cannot update containers or change settings. Administrators can do everything, including managing users. New users must choose their own password at first sign-in.</p>
+        <div id="u-list"></div>
+        <label for="u-name">New user</label>
+        <input id="u-name" autocomplete="off" placeholder="username" spellcheck="false">
+        <input id="u-pass" type="password" autocomplete="new-password" placeholder="temporary password (min 10 characters)" style="margin-top:6px">
+        <select id="u-role" style="margin-top:6px"><option value="viewer">Standard user (read-only)</option><option value="admin">Administrator</option></select>
+        <button id="u-add" type="button" class="primary">Create user</button>
+        <p id="u-msg" class="msg" role="status"></p>
+      </div>
+      </div>
+      <div class="actions"><button id="d-close" type="button">Close</button></div>
+    </form>
+  </dialog>
+  <div class="wrap"><table>
+    <thead><tr id="head"></tr></thead>
+    <tbody id="body"></tbody>
+  </table></div>
+  <p class="sub ver" id="ver"></p>
+</main>
+<script>
+const COLS=[["machine","Machine"],["container","Container"],["image","Image:tag"],["state","State"],["status","Update status"],["checked","Last checked"]];
+const LABEL={up_to_date:"Up to date",update_available:"Update available",unknown:"Unknown"};
+let data={rows:[]},sortKey="status",sortDesc=false,timer=null;
+const collapsed=new Set();
+const $=id=>document.getElementById(id);
+// every API call goes through here: an expired session sends you to the login page
+async function authFetch(url,opts){
+  const res=await fetch(url,opts);
+  if(res.status===401){location.href="/login";throw new Error("Not signed in")}
+  return res;
+}
+$("logout").onclick=async()=>{try{await fetch("/api/logout",{method:"POST"})}catch{}location.href="/login"};
+
+// theme
+const root=document.documentElement;
+try{const t=localStorage.getItem("theme");if(t)root.dataset.theme=t}catch{}
+$("theme").onclick=()=>{
+  const dark=root.dataset.theme?root.dataset.theme==="dark":matchMedia("(prefers-color-scheme:dark)").matches;
+  root.dataset.theme=dark?"light":"dark";
+  try{localStorage.setItem("theme",root.dataset.theme)}catch{}
+};
+
+const head=$("head");
+COLS.forEach(([k,l])=>{const th=document.createElement("th");th.textContent=l;th.dataset.k=k;
+  th.onclick=()=>{sortDesc=sortKey===k?!sortDesc:false;sortKey=k;render()};head.appendChild(th)});
+
+function el(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
+
+function render(){
+  const s=data.summary||{};
+  $("s-out").textContent=s.outdated??"–";$("s-ok").textContent=s.up_to_date??"–";
+  $("s-unk").textContent=s.unknown??"–";$("s-tot").textContent=s.total??"–";
+  $("last").textContent=data.refreshing?"Refreshing…":
+    data.last_refresh?"Last refresh: "+new Date(data.last_refresh).toLocaleString():"Waiting for first refresh…";
+  $("refresh").disabled=!!data.refreshing;
+  $("ver").textContent=data.version?"Manifest v"+data.version:"";
+  $("logout").hidden=!data.auth_enabled;
+  $("who").textContent=data.auth_enabled&&data.me?data.me.username+(data.me.role==="admin"?" (admin)":" (read-only)"):"";
+
+  const b=$("banners");b.replaceChildren();
+  if(data.error)b.appendChild(el("div","banner",data.error));
+  (data.environments||[]).filter(e=>!e.online).forEach(e=>
+    b.appendChild(el("div","banner",`${e.name} is offline or unreachable (${e.error}). Showing last known data.`)));
+
+  const fm=$("f-machine"),cur=fm.value;
+  const machines=[...new Set((data.rows||[]).map(r=>r.machine))].sort();
+  fm.replaceChildren(new Option("All machines",""),...machines.map(m=>new Option(m,m)));fm.value=machines.includes(cur)?cur:"";
+
+  const st=$("f-status").value,q=$("f-text").value.toLowerCase();
+  const order={update_available:0,unknown:1,up_to_date:2};
+  const rows=(data.rows||[]).filter(r=>(!fm.value||r.machine===fm.value)&&(!st||r.status===st)&&
+    (!q||(r.container+" "+r.image).toLowerCase().includes(q)));
+  rows.sort((a,b)=>{
+    let x=a[sortKey],y=b[sortKey];
+    if(sortKey==="status"){x=order[x];y=order[y]}
+    const c=x<y?-1:x>y?1:0;return (sortDesc?-c:c)||a.container.localeCompare(b.container)});
+  head.querySelectorAll("th").forEach(th=>{th.className=th.dataset.k===sortKey?"sorted"+(sortDesc?" desc":""):""});
+
+  const body=$("body");body.replaceChildren();
+  if(!rows.length){const tr=el("tr"),td=el("td","empty","No containers match.");td.colSpan=6;tr.appendChild(td);body.appendChild(tr);return}
+  const grouped=$("group").checked;
+  const addRow=r=>{
+    const tr=el("tr");
+    tr.append(grouped?el("td","dim",""):el("td",null,r.machine),el("td",null,r.container),el("td","img",r.image),el("td",null,r.state));
+    const td=el("td"),badge=el("span","badge "+r.status,LABEL[r.status]);
+    if(r.reason)badge.title=r.reason;td.appendChild(badge);
+    if(r.status==="update_available"&&data.updates_enabled&&isAdmin()&&r.id){
+      const b=el("button","upd","Update");
+      b.onclick=()=>updateContainer(r,b);td.appendChild(b);
+    }
+    if(r.status==="unknown"&&r.reason){td.appendChild(el("div","sub",r.reason));td.style.whiteSpace="normal"}
+    tr.append(td,el("td",null,new Date(r.checked).toLocaleString()));
+    body.appendChild(tr);
+  };
+  if(!grouped){rows.forEach(addRow);return}
+  const groups=new Map();
+  rows.forEach(r=>{if(!groups.has(r.machine))groups.set(r.machine,[]);groups.get(r.machine).push(r)});
+  let names=[...groups.keys()].sort((a,b)=>a.localeCompare(b));
+  if(sortKey==="machine"&&sortDesc)names.reverse();
+  names.forEach(name=>{
+    const list=groups.get(name),out=list.filter(r=>r.status==="update_available").length;
+    const closed=collapsed.has(name);
+    const tr=el("tr","group"),td=el("td");td.colSpan=6;
+    td.append((closed?"▸ ":"▾ ")+name,el("span","gcount",list.length+(list.length===1?" container":" containers")));
+    if(out)td.appendChild(el("span","gout",out+" outdated"));
+    tr.onclick=()=>{closed?collapsed.delete(name):collapsed.add(name);render()};
+    tr.appendChild(td);body.appendChild(tr);
+    if(!closed)list.forEach(addRow);
+  });
+}
+
+// ---- settings dialog ----
+const dlg=$("settings");
+function say(text,ok,id="d-msg"){const m=$(id);m.textContent=text;m.className="msg "+(text?(ok?"ok":"err"):"")}
+async function api(method,url,body){
+  const res=await authFetch(url,{method,headers:body?{"Content-Type":"application/json"}:{},body:body?JSON.stringify(body):undefined});
+  const out=await res.json().catch(()=>({}));
+  if(!res.ok)throw new Error(out.detail||("HTTP "+res.status));
+  return out;
+}
+function showSettings(s){
+  $("d-status").textContent=s.enabled
+    ?`Alerts on. Webhook ${s.webhook_hint}`+(s.source==="env"?" (set by environment variable; saving a new one overrides it)":"")
+    :"Alerts off. Add a webhook to get a Discord message when a container has an update.";
+  $("d-pub").value=s.public_url||"";
+  $("d-test").disabled=!s.enabled;$("d-remove").disabled=!s.enabled;
+}
+const isAdmin=()=>data.me&&data.me.role==="admin";
+$("gear").onclick=async()=>{
+  say("");say("",false,"cp-msg");say("",false,"u-msg");say("",false,"tf-msg");
+  ["tf-pass","tf-dpass","tf-dcode","tf-code"].forEach(i=>$(i).value="");$("tf-codelist").textContent="";
+  $("k-new").hidden=true;$("k-value").textContent="";say("",false,"k-msg");
+  if(data.auth_enabled){tfRefresh();keysRefresh()}
+  $("d-url").value="";["cp-cur","cp-new","cp-new2"].forEach(i=>$(i).value="");
+  $("sec-account").hidden=!data.auth_enabled;      // no accounts when login is disabled
+  $("sec-users").hidden=!data.auth_enabled;
+  $("admin-sections").hidden=!isAdmin();
+  dlg.showModal();
+  if(isAdmin()){
+    try{showSettings(await api("GET","/api/settings"))}catch(e){say("Could not load settings: "+e.message)}
+    if(data.auth_enabled)loadUsers();
+  }
+};
+
+// ---- API keys ----
+const when=s=>s?new Date(s).toLocaleString():"never";
+async function keysRefresh(){
+  let keys;
+  try{keys=await api("GET","/api/keys")}catch(e){return say(e.message,false,"k-msg")}
+  const box=$("k-list");box.replaceChildren();
+  if(!keys.length)box.appendChild(el("p","sub","No API keys yet."));
+  keys.forEach(k=>{
+    const row=el("div","urow");
+    row.append(el("b",null,k.name),el("span","sub",`${k.prefix}… · created ${when(k.created)} · last used ${when(k.last_used)}`));
+    const rv=el("button",null,"Revoke");
+    rv.onclick=async()=>{
+      if(!confirm(`Revoke the key "${k.name}"? Anything using it (e.g. Homepage) will stop working.`))return;
+      try{await api("DELETE",`/api/keys/${encodeURIComponent(k.id)}`);say("Key revoked.",true,"k-msg");keysRefresh()}
+      catch(e){say(e.message,false,"k-msg")}
+    };
+    row.append(rv);box.appendChild(row);
+  });
+}
+$("k-add").onclick=async()=>{
+  try{
+    const k=await api("POST","/api/keys",{name:$("k-name").value});
+    $("k-name").value="";$("k-value").textContent=k.key;$("k-new").hidden=false;say("",false,"k-msg");keysRefresh();
+  }catch(e){say(e.message,false,"k-msg")}
+};
+$("k-copy").onclick=async()=>{
+  try{await navigator.clipboard.writeText($("k-value").textContent);say("Copied.",true,"k-msg")}
+  catch{say("Could not copy automatically. Select the key and copy it by hand.",false,"k-msg")}
+};
+$("k-done").onclick=()=>{$("k-value").textContent="";$("k-new").hidden=true;say("",false,"k-msg")};
+
+// ---- two-factor authentication ----
+function tfShow(which){["tf-off","tf-setup","tf-codes","tf-on"].forEach(i=>$(i).hidden=i!==which)}
+async function tfRefresh(){
+  try{
+    const s=await api("GET","/api/2fa");
+    $("tf-status").textContent=s.enabled
+      ?`2FA is on. ${s.recovery_remaining} recovery code${s.recovery_remaining===1?"":"s"} left.`
+      :"Adds a 6-digit code from an authenticator app to your sign-in.";
+    tfShow(s.enabled?"tf-on":"tf-off");
+  }catch(e){say(e.message,false,"tf-msg")}
+}
+$("tf-start").onclick=async()=>{
+  try{
+    const s=await api("POST","/api/2fa/setup",{password:$("tf-pass").value});
+    $("tf-pass").value="";$("tf-qr").src=s.qr;$("tf-secret").textContent=s.secret;$("tf-code").value="";
+    say("",false,"tf-msg");tfShow("tf-setup");$("tf-code").focus();
+  }catch(e){say(e.message,false,"tf-msg")}
+};
+$("tf-enable").onclick=async()=>{
+  try{
+    const out=await api("POST","/api/2fa/enable",{code:$("tf-code").value});
+    $("tf-codelist").textContent=out.recovery_codes.join("\n");
+    say("",false,"tf-msg");tfShow("tf-codes");
+  }catch(e){say(e.message,false,"tf-msg")}
+};
+$("tf-copy").onclick=async()=>{
+  try{await navigator.clipboard.writeText($("tf-codelist").textContent);say("Copied.",true,"tf-msg")}
+  catch{say("Could not copy automatically. Select the codes and copy them by hand.",false,"tf-msg")}
+};
+$("tf-done").onclick=()=>{$("tf-codelist").textContent="";say("",false,"tf-msg");tfRefresh();load()};
+$("tf-disable").onclick=async()=>{
+  try{
+    await api("POST","/api/2fa/disable",{password:$("tf-dpass").value,code:$("tf-dcode").value});
+    $("tf-dpass").value="";$("tf-dcode").value="";say("2FA turned off.",true,"tf-msg");tfRefresh();load();
+  }catch(e){say(e.message,false,"tf-msg")}
+};
+
+$("cp-save").onclick=async()=>{
+  const cur=$("cp-cur").value,n1=$("cp-new").value,n2=$("cp-new2").value;
+  if(n1!==n2)return say("The new passwords do not match.",false,"cp-msg");
+  try{await api("POST","/api/change-password",{current_password:cur,new_password:n1});
+    ["cp-cur","cp-new","cp-new2"].forEach(i=>$(i).value="");say("Password changed.",true,"cp-msg")}
+  catch(e){say(e.message,false,"cp-msg")}
+};
+
+async function loadUsers(){
+  let users;
+  try{users=await api("GET","/api/users")}catch(e){return say(e.message,false,"u-msg")}
+  const box=$("u-list");box.replaceChildren();
+  users.forEach(u=>{
+    const row=el("div","urow");
+    row.append(el("b",null,u.username),
+      el("span","sub",(u.role==="admin"?"Administrator":"Standard user")+(u.totp?" · 2FA on":"")+(u.api_keys?` · ${u.api_keys} API key${u.api_keys===1?"":"s"}`:"")+(u.must_change?" · must choose a new password":"")));
+    if(u.username!==data.me.username){
+      if(u.api_keys){
+        const rk=el("button",null,"Revoke keys");
+        rk.onclick=async()=>{
+          if(!confirm(`Revoke all ${u.api_keys} API key(s) of "${u.username}"?`))return;
+          try{await api("POST",`/api/users/${encodeURIComponent(u.username)}/revoke-keys`);say(`Keys revoked for ${u.username}.`,true,"u-msg");loadUsers()}
+          catch(e){say(e.message,false,"u-msg")}
+        };
+        row.append(rk);
+      }
+      if(u.totp){
+        const r2=el("button",null,"Reset 2FA");
+        r2.onclick=async()=>{
+          if(!confirm(`Turn off 2FA for "${u.username}"? Only do this if they lost their authenticator and recovery codes.`))return;
+          try{await api("POST",`/api/users/${encodeURIComponent(u.username)}/reset-2fa`);say(`2FA reset for ${u.username}.`,true,"u-msg");loadUsers()}
+          catch(e){say(e.message,false,"u-msg")}
+        };
+        row.append(r2);
+      }
+      const makeAdmin=u.role!=="admin";
+      const roleBtn=el("button",null,makeAdmin?"Make admin":"Make standard");
+      roleBtn.onclick=async()=>{
+        if(!confirm(makeAdmin
+          ?`Make "${u.username}" an administrator? They will be able to update containers, change settings and manage users.`
+          :`Make "${u.username}" a standard (read-only) user?`))return;
+        try{await api("POST",`/api/users/${encodeURIComponent(u.username)}/role`,{role:makeAdmin?"admin":"viewer"});
+          say(`${u.username} is now ${makeAdmin?"an administrator":"a standard user"}.`,true,"u-msg");loadUsers()}
+        catch(e){say(e.message,false,"u-msg")}
+      };
+      const reset=el("button",null,"Reset password"),del=el("button",null,"Delete");
+      reset.onclick=async()=>{
+        const p=prompt(`Temporary password for "${u.username}" (at least 10 characters).\nThey must replace it at their next sign-in.`);
+        if(!p)return;
+        try{await api("POST",`/api/users/${encodeURIComponent(u.username)}/reset`,{password:p});
+          say(`Password reset for ${u.username}.`,true,"u-msg");loadUsers()}
+        catch(e){say(e.message,false,"u-msg")}
+      };
+      del.onclick=async()=>{
+        if(!confirm(`Delete user "${u.username}"? They will be signed out immediately.`))return;
+        try{await api("DELETE",`/api/users/${encodeURIComponent(u.username)}`);say("User deleted.",true,"u-msg");loadUsers()}
+        catch(e){say(e.message,false,"u-msg")}
+      };
+      row.append(roleBtn,reset,del);
+    }
+    box.appendChild(row);
+  });
+}
+$("u-add").onclick=async()=>{
+  try{await api("POST","/api/users",{username:$("u-name").value,password:$("u-pass").value,role:$("u-role").value});
+    say(`User "${$("u-name").value.trim().toLowerCase()}" created. They must choose a new password at first sign-in.`,true,"u-msg");
+    $("u-name").value="";$("u-pass").value="";loadUsers()}
+  catch(e){say(e.message,false,"u-msg")}
+};
+$("d-close").onclick=()=>dlg.close();
+$("d-save").onclick=async()=>{
+  const body={public_url:$("d-pub").value.trim()},url=$("d-url").value.trim();
+  if(url)body.discord_webhook_url=url;
+  try{showSettings(await api("PUT","/api/settings",body));$("d-url").value="";say("Saved.",true)}
+  catch(e){say(e.message)}
+};
+$("d-test").onclick=async()=>{
+  say("Sending…",true);
+  try{await api("POST","/api/notify/test");say("Test message sent. Check your Discord channel.",true)}
+  catch(e){say(e.message)}
+};
+$("d-remove").onclick=async()=>{
+  if(!confirm("Remove the Discord webhook and turn alerts off?"))return;
+  try{showSettings(await api("PUT","/api/settings",{discord_webhook_url:""}));say("Webhook removed.",true)}
+  catch(e){say(e.message)}
+};
+
+async function updateContainer(r,btn){
+  if(!confirm(`Update "${r.container}" on ${r.machine}?\n\nThis pulls the latest image and recreates the container. It will restart briefly.`))return;
+  btn.disabled=true;btn.textContent="Updating…";
+  try{
+    const res=await authFetch(`/api/containers/${r.env_id}/${r.id}/update`,{method:"POST"});
+    const out=await res.json().catch(()=>({}));
+    if(!res.ok)alert("Update failed: "+(out.detail||res.status));
+    else if(out.status==="update_available")alert("The container was recreated, but still reports an update. The image may not have been pulled.");
+  }catch{alert("Update failed: cannot reach the Manifest backend.")}
+  load();
+}
+
+async function load(){
+  try{data=await (await authFetch("/api/containers")).json()}catch{data.error="Cannot reach the monitor backend."}
+  render();
+  clearTimeout(timer);
+  timer=setTimeout(load,data.refreshing?2000:60000);
+}
+$("refresh").onclick=async()=>{$("refresh").disabled=true;await authFetch("/api/refresh",{method:"POST"});load()};
+["f-machine","f-status","group"].forEach(i=>$(i).onchange=render);$("f-text").oninput=render;
+load();
+</script>
+</body>
+</html>
