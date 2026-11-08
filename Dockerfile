@@ -1,6 +1,8 @@
 FROM python:3.12-slim
 LABEL org.opencontainers.image.title="Manifest" \
       org.opencontainers.image.description="Shows which Docker containers across your Portainer environments have a newer image" \
+      org.opencontainers.image.licenses="MIT" \
+      org.opencontainers.image.source="https://github.com/MrRobot-64/Manifest" \
       org.opencontainers.image.version="1.0.0"
 WORKDIR /srv
 ENV PYTHONUNBUFFERED=1
