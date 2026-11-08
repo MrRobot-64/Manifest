@@ -48,21 +48,9 @@ Full documentation is in the [wiki](https://github.com/MrRobot-64/Manifest/wiki)
 
 **Exposing Manifest to the internet?** Read [Login and Security](https://github.com/MrRobot-64/Manifest/wiki/Login-and-Security) first: use HTTPS and change the default password.
 
-## Versions and releases
+## Releases
 
-Current version: **1.0.0** (shown at the bottom of the page and in the startup log). See [CHANGELOG.md](CHANGELOG.md) and the [Releases page](https://github.com/MrRobot-64/Manifest/releases).
-
-**Cutting a release** (maintainers):
-
-1. Choose the new number (e.g. `1.1.0`) and update it in three places: `app/version.py`, the `org.opencontainers.image.version` label in `Dockerfile`, and a new `## [1.1.0] - YYYY-MM-DD` section at the top of `CHANGELOG.md`.
-2. Run `python -m pytest tests`. It fails if those three disagree.
-3. Commit, tag and push:
-   ```bash
-   git commit -am "Release 1.1.0"
-   git tag -a v1.1.0 -m "Manifest 1.1.0"
-   git push origin main --tags
-   ```
-4. The GitHub Actions workflow then tests, builds and publishes the image (`1.1.0`, `1.1` and `latest`) and creates the GitHub release from the changelog. Nothing else to do.
+Current version: **1.0.0**. See the [Releases page](https://github.com/MrRobot-64/Manifest/releases) and [CHANGELOG.md](CHANGELOG.md). Maintainers: see [Releasing](https://github.com/MrRobot-64/Manifest/wiki/Releasing).
 
 ## License
 
