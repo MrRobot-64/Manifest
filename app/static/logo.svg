@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Manifest">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1e3a8a"/>
+      <stop offset="1" stop-color="#2563eb"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#bg)"/>
+  <!-- paper -->
+  <rect x="32" y="22" width="64" height="92" rx="6" fill="#f8fafc"/>
+  <!-- clip -->
+  <rect x="49" y="14" width="30" height="15" rx="4" fill="#0f172a"/>
+  <circle cx="64" cy="21" r="3" fill="#94a3b8"/>
+  <!-- heading -->
+  <rect x="42" y="36" width="44" height="5" rx="2.5" fill="#1e3a8a"/>
+  <!-- row 1: up to date -->
+  <circle cx="47" cy="56" r="5.5" fill="#16a34a"/>
+  <path d="M44.2 56 L46.4 58.2 L50 53.8" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="58" y="54" width="28" height="4" rx="2" fill="#cbd5e1"/>
+  <!-- row 2: up to date -->
+  <circle cx="47" cy="72" r="5.5" fill="#16a34a"/>
+  <path d="M44.2 72 L46.4 74.2 L50 69.8" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="58" y="70" width="22" height="4" rx="2" fill="#cbd5e1"/>
+  <!-- row 3: update available -->
+  <circle cx="47" cy="88" r="5.5" fill="#f59e0b"/>
+  <path d="M47 91 V85.5 M44.3 88 L47 85.3 L49.7 88" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="58" y="86" width="26" height="4" rx="2" fill="#f59e0b"/>
+  <!-- row 4: up to date -->
+  <circle cx="47" cy="104" r="5.5" fill="#16a34a"/>
+  <path d="M44.2 104 L46.4 106.2 L50 101.8" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="58" y="102" width="20" height="4" rx="2" fill="#cbd5e1"/>
+</svg>
